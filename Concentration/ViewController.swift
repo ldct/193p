@@ -38,7 +38,7 @@ class ViewController: UIViewController {
             let button = cardButtons[index]
             let card = game.cards[index]
             if card.isFaceUp {
-                button.setTitle(game.emoji(for: card), for: UIControl.State.normal)
+                button.setTitle(emoji(for: card), for: UIControl.State.normal)
                 button.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
             } else {
                 button.setTitle("", for: UIControl.State.normal)
@@ -49,10 +49,17 @@ class ViewController: UIViewController {
         flipCountLabel.text = "Flips: \(game.flipCount)"
     }
     
-
+    private var emojiChoices = ["🎃", "😈", "☠", "🤡", "😱", "👻", "🦇", "🦉"]
+    private var flagEmojis = ["🇯🇵", "🇰🇷", "🇩🇪", "🇨🇳", "🇺🇸", "🇫🇷", "🇪🇸", "🇮🇹", "🇷🇺", "🇬🇧"]
     
+    private var emoji = Dictionary<Int, String>()
 
-
+    private func emoji(for card: Card) -> String {
+        if emoji[card.identifier] == nil, emojiChoices.count > 0 {
+            emoji[card.identifier] = emojiChoices.remove(at: emojiChoices.count.arc4random)
+        }
+        return emoji[card.identifier] ?? "?"
+    }
 }
 
 extension Int {

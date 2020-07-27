@@ -83,6 +83,7 @@ class Concentration {
         }
         flipCount = 0
         emojiChoices = themes.randomElement()!
+        emoji.removeAll()
         reset()
     }
     
