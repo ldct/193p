@@ -33,17 +33,7 @@ class Concentration {
     
     private var indexOfOneAndOnlyFaceUpCard: Int? {
         get {
-            var foundIndex: Int?
-            for i in cards.indices {
-                if cards[i].isFaceUp {
-                    if foundIndex == nil {
-                        foundIndex = i
-                    } else {
-                        return nil
-                    }
-                }
-            }
-            return foundIndex
+            return cards.indices.filter { cards[$0].isFaceUp }.oneAndOnly
         } set {
             for i in cards.indices {
                 cards[i].isFaceUp = (i == newValue)
@@ -91,4 +81,10 @@ class Concentration {
     }
     
     // todo: shuffle cards
+}
+
+extension Collection {
+    var oneAndOnly: Element? {
+        return count == 1 ? first : nil
+    }
 }
