@@ -9,7 +9,24 @@
 import Foundation
 
 class Concentration {
+    private(set) var flipCount = 0
     private(set) var cards = Array<Card>()
+    
+    private var emoji = Dictionary<Int, String>()
+
+    private let themes = [
+        ["🎃", "😈", "☠", "🤡", "😱", "👻", "🦇", "🦉"],
+        ["🇯🇵", "🇰🇷", "🇩🇪", "🇨🇳", "🇺🇸", "🇫🇷", "🇪🇸", "🇮🇹", "🇷🇺", "🇬🇧"]
+    ]
+    
+    private var emojiChoices : [String];
+    
+    func emoji(for card: Card) -> String {
+        if emoji[card.identifier] == nil, emojiChoices.count > 0 {
+            emoji[card.identifier] = emojiChoices.remove(at: emojiChoices.count.arc4random)
+        }
+        return emoji[card.identifier] ?? "?"
+    }
     
     private var indexOfOneAndOnlyFaceUpCard: Int? {
         get {
@@ -31,7 +48,18 @@ class Concentration {
         }
     }
     
+    func reset() {
+        emojiChoices = themes.randomElement()!
+        emoji.removeAll()
+        flipCount = 0
+        cards.shuffle()
+        for i in cards.indices {
+            cards[i].reset()
+        }
+    }
+    
     func chooseCard(at index: Int) {
+        flipCount += 1
         assert(cards.indices.contains(index), "chosen index not in the cards")
         if !cards[index].isMatched {
             if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
@@ -53,6 +81,9 @@ class Concentration {
             let card = Card()
             cards += [card, card]
         }
+        flipCount = 0
+        emojiChoices = themes.randomElement()!
+        reset()
     }
     
     // todo: shuffle cards
